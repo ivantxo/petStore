@@ -14,6 +14,7 @@ use \React\Socket\Server as Socket;
 
 use App\Core\Router;
 use App\Core\ErrorHandler;
+use App\Core\JsonRequestDecoder;
 use App\Users\Controllers\DeleteUser;
 use App\Users\Controllers\GetByUserName;
 use App\Users\Controllers\SignInUser;
@@ -34,6 +35,7 @@ $routes->get('/user/{username}', new GetByUserName());
 $server = new Server(
     $loop,
     new ErrorHandler(),
+    new JsonRequestDecoder(),
     new Router($routes)
 );
 
