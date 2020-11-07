@@ -29,7 +29,6 @@ final class SignUpUser
 
     public function __invoke(ServerRequestInterface $request)
     {
-        $password = $request->getParsedBody()['password'];
         $user = new UserValidator($request);
         $user->validate();
         return $this->storage->create(
@@ -37,7 +36,7 @@ final class SignUpUser
             $user->firstName(),
             $user->lastName(),
             $user->email(),
-            $password,
+            $user->hashedPassword(),
             $user->phone())
             ->then(
                 function () {
@@ -46,7 +45,7 @@ final class SignUpUser
             )
             ->otherwise(
                 function (UserAlreadyExists $exception) {
-                    return JsonResponse::internalServerError('User already exists');
+                    return JsonResponse::internalServerError('Username is already taken');
                 }
             )
             ->otherwise(

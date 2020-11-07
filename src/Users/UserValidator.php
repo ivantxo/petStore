@@ -55,6 +55,13 @@ final class UserValidator
             )
         )->setName('email');
 
+        $passwordValidator = Validator::key(
+            'password',
+            Validator::allOf(
+                Validator::notBlank(),
+                Validator::stringType()
+            )
+        )->setName('password');
         $phoneValidator = Validator::key(
             'phone',
             Validator::allOf(
@@ -68,6 +75,7 @@ final class UserValidator
             $firstNameValidator,
             $lastNameValidator,
             $emailValidator,
+            $passwordValidator,
             $phoneValidator
         );
         $validator->assert($this->request->getParsedBody());
@@ -91,6 +99,16 @@ final class UserValidator
     public function email(): string
     {
         return $this->request->getParsedBody()['email'];
+    }
+
+    public function hashedPassword(): string
+    {
+        return password_hash($this->password(), PASSWORD_BCRYPT);
+    }
+
+    public function password(): string
+    {
+        return $this->request->getParsedBody()['password'];
     }
 
     public function phone(): string
