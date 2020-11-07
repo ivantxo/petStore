@@ -4,9 +4,12 @@
 require __DIR__ . '/vendor/autoload.php';
 
 
+use Dotenv\Dotenv;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser\Std;
+use React\MySQL\Factory as MySQLFactory;
+use React\MySQL\QueryResult;
 use React\EventLoop\Factory;
 use React\Http\Server;
 use \React\Socket\Server as Socket;
@@ -23,6 +26,23 @@ use App\Users\Controllers\UpdateUser;
 
 
 $loop = Factory::create();
+
+// create DB connection
+$env = Dotenv::createImmutable(__DIR__);
+$env->load();
+$mysql = new MySQLFactory($loop);
+$uri = $_ENV['DB_USER']
+    . ':' . $_ENV['DB_PASS']
+    . '@' . $_ENV['DB_HOST']
+    . '/' . $_ENV['DB_NAME'];
+$connection = $mysql->createLazyConnection($uri);
+$connection->query('SHOW TABLES')
+    ->then(
+        function (QueryResult $result) {
+            print_r($result->resultRows);
+        }
+    );
+
 $routes = new RouteCollector(new Std(), new GroupCountBased());
 
 // routes
