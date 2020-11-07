@@ -33,4 +33,14 @@ final class JsonResponse
     {
         return self::response(404);
     }
+
+    public static function created($data): Response
+    {
+        return self::response(201, $data);
+    }
+
+    public static function badRequest(array $errors): Response
+    {
+        return self::response(400, ['errors' => $errors]);
+    }
 }

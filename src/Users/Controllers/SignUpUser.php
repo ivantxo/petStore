@@ -4,13 +4,16 @@
 namespace App\Users\Controllers;
 
 
-use App\Users\EmailIsAlreadyTaken;
-use App\Users\UserAlreadyExists;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 
 
+use App\Users\EmailIsAlreadyTaken;
+use App\Users\UserAlreadyExists;
 use App\Core\JsonResponse;
 use App\Users\Storage;
+use App\Users\UserValidator;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 
 final class SignUpUser
@@ -27,16 +30,19 @@ final class SignUpUser
 
     public function __invoke(ServerRequestInterface $request)
     {
-        $userName = $request->getParsedBody()['userName'];
-        $firstName = $request->getParsedBody()['firstName'];
-        $lastName = $request->getParsedBody()['lastName'];
-        $email = $request->getParsedBody()['email'];
         $password = $request->getParsedBody()['password'];
-        $phone = $request->getParsedBody()['phone'];
-        return $this->storage->create($userName, $firstName, $lastName, $email, $password, $phone)
+        $user = new UserValidator($request);
+        $user->validate();
+        return $this->storage->create(
+            $user->userName(),
+            $user->firstName(),
+            $user->lastName(),
+            $user->email(),
+            $password,
+            $user->phone())
             ->then(
                 function () {
-                    return JsonResponse::ok(['user' => 'created']);
+                    return JsonResponse::created([]);
                 }
             )
             ->otherwise(
@@ -47,6 +53,11 @@ final class SignUpUser
             ->otherwise(
                 function (EmailIsAlreadyTaken $exception) {
                     return JsonResponse::internalServerError('Email is already taken');
+                }
+            )
+            ->otherwise(
+                function (NestedValidationException $exception) {
+                    return JsonResponse::badRequest(array_values($exception->getMessages()));
                 }
             );
     }
