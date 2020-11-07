@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use App\Core\JsonResponse;
 use App\Users\Storage;
 use App\Users\User;
+use App\Users\UserNotFound;
 
 
 final class GetByUserName
@@ -30,6 +31,11 @@ final class GetByUserName
             ->then(
                 function (User $user) {
                     return JsonResponse::ok(['user' => $user]);
+                }
+            )
+            ->otherwise(
+                function (UserNotFound $error) {
+                    return JsonResponse::notFound();
                 }
             );
     }

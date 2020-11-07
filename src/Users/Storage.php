@@ -35,6 +35,9 @@ final class Storage
             )
             ->then(
                 function (QueryResult $result) {
+                    if (empty($result->resultRows)) {
+                        throw new UserNotFound();
+                    }
                     return $this->mapUser($result->resultRows[0]);
                 }
             );

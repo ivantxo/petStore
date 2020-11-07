@@ -28,4 +28,9 @@ final class JsonResponse
     {
         return self::response(500, ['messsage' => $reason]);
     }
+
+    public static function notFound(): Response
+    {
+        return self::response(404);
+    }
 }
