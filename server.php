@@ -41,7 +41,7 @@ $users = new Users($connection);
 $routes = new RouteCollector(new Std(), new GroupCountBased());
 
 // routes
-$routes->delete('/user/{username}', new DeleteUser());
+$routes->delete('/user/{username}', new DeleteUser($users));
 $routes->get('/user/login', new SignInUser());
 $routes->post('/user', new SignUpUser());
 $routes->put('/user/{username}', new UpdateUser());

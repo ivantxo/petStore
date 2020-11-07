@@ -43,9 +43,29 @@ final class Storage
             );
     }
 
+    public function delete(string $userName): PromiseInterface
+    {
+        return $this->connection
+            ->query(
+                'DELETE
+                     FROM
+                        users
+                     WHERE
+                        username = ?',
+                [$userName]
+            )
+            ->then(
+                function (QueryResult $result) {
+                    if ($result->affectedRows === 0) {
+                        throw new UserNotFound();
+                    }
+                }
+            );
+    }
+
     private function mapUser(array $row): User
     {
-        return new User(
+        $user = new User(
             (int)$row['id'],
             $row['username'],
             $row['first_name'],
@@ -56,5 +76,6 @@ final class Storage
             $row['status'],
             $row['created_at']
         );
+        return $user;
     }
 }
