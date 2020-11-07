@@ -4,16 +4,15 @@
 namespace App\Users\Controllers;
 
 
-use Exception;
 use Psr\Http\Message\ServerRequestInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 
+use App\Core\JsonResponse;
 use App\Users\EmailIsAlreadyTaken;
 use App\Users\UserAlreadyExists;
-use App\Core\JsonResponse;
 use App\Users\Storage;
 use App\Users\UserValidator;
-use Respect\Validation\Exceptions\NestedValidationException;
 
 
 final class SignUpUser
