@@ -32,8 +32,7 @@ final class Storage
                 FROM
                     users
                 WHERE
-                    username = ?',
-                [$userName]
+                    username = ?', [$userName]
             )
             ->then(
                 function (QueryResult $result) {
@@ -53,8 +52,7 @@ final class Storage
                 FROM
                     users
                 WHERE
-                    username = ?',
-                [$userName]
+                    username = ?', [$userName]
             )
             ->then(
                 function (QueryResult $result) {
@@ -80,8 +78,7 @@ final class Storage
                                 phone = ?
                             WHERE
                                 id = ?
-                        ',
-                            [$firstName, $lastName, $phone, $user->id]);
+                        ', [$firstName, $lastName, $phone, $user->id]);
                 }
             )
             ->otherwise(
@@ -107,12 +104,11 @@ final class Storage
                             function () use ($userName, $firstName, $lastName, $email, $password, $phone) {
                                 $this->connection
                                     ->query('
-                            INSERT INTO 
-                                users (username, first_name, last_name, email, password, phone)
-                            VALUES
-                                (?, ?, ?, ?, ?, ?)
-                        ',
-                                        [$userName, $firstName, $lastName, $email, $password, $phone]);
+                                      INSERT INTO 
+                                        users (username, first_name, last_name, email, password, phone)
+                                      VALUES
+                                        (?, ?, ?, ?, ?, ?)
+                                    ', [$userName, $firstName, $lastName, $email, $password, $phone]);
                             }
                         );
                 }
