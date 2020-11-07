@@ -7,6 +7,8 @@ namespace App\Users;
 use React\MySQL\ConnectionInterface;
 use React\MySQL\QueryResult;
 use React\Promise\PromiseInterface;
+use function React\Promise\resolve;
+use function React\Promise\reject;
 
 
 final class Storage
@@ -85,6 +87,42 @@ final class Storage
             ->otherwise(
                 function () {
                     throw new UserNotFound();
+                }
+            );
+    }
+
+    public function create(
+        string $userName,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $password,
+        string $phone): PromiseInterface
+    {
+        return $this->userNameIsNotTaken($userName)
+            ->then(
+                function () use ($userName, $firstName, $lastName, $email, $password, $phone) {
+                    $this->connection
+                        ->query('
+                            INSERT INTO 
+                                users (username, first_name, last_name, email, password, phone)
+                            VALUES
+                                (?, ?, ?, ?, ?, ?)
+                        ',
+                        [$userName, $firstName, $lastName, $email, $password, $phone]);
+                }
+            );
+    }
+
+    private function userNameIsNotTaken(string $userName): PromiseInterface
+    {
+        return $this->connection
+            ->query('SELECT 1 FROM users WHERE username = ?', [$userName])
+            ->then(
+                function (QueryResult $result) {
+                    return empty($result->resultRows)
+                        ? resolve()
+                        : reject(new UserAlreadyExists());
                 }
             );
     }
