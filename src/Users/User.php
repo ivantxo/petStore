@@ -58,7 +58,7 @@ final class User
         string $lastName,
         string $email,
         string $password,
-        string $phone,
+        int $phone,
         string $status,
         string $createdAt)
     {

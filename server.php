@@ -22,6 +22,7 @@ use App\Users\Controllers\GetByUserName;
 use App\Users\Controllers\SignInUser;
 use App\Users\Controllers\SignUpUser;
 use App\Users\Controllers\UpdateUser;
+use App\Users\Storage as Users;
 
 
 $loop = Factory::create();
@@ -35,6 +36,7 @@ $uri = $_ENV['DB_USER']
     . '@' . $_ENV['DB_HOST']
     . '/' . $_ENV['DB_NAME'];
 $connection = $mysql->createLazyConnection($uri);
+$users = new Users($connection);
 
 $routes = new RouteCollector(new Std(), new GroupCountBased());
 
@@ -43,7 +45,7 @@ $routes->delete('/user/{username}', new DeleteUser());
 $routes->get('/user/login', new SignInUser());
 $routes->post('/user', new SignUpUser());
 $routes->put('/user/{username}', new UpdateUser());
-$routes->get('/user/{username}', new GetByUserName());
+$routes->get('/user/{username}', new GetByUserName($users));
 
 $server = new Server(
     $loop,
