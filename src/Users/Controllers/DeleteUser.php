@@ -29,7 +29,7 @@ final class DeleteUser
         return $this->storage->delete($userName)
             ->then(
                 function () {
-                    return JsonResponse::ok(['user' => 'deleted']);
+                    return JsonResponse::ok([]);
                 }
             )
             ->otherwise(

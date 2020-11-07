@@ -30,7 +30,7 @@ final class SignUpUser
     public function __invoke(ServerRequestInterface $request)
     {
         $user = new UserValidator($request);
-        $user->validate();
+        $user->validate('signup');
         return $this->storage->create(
             $user->userName(),
             $user->firstName(),

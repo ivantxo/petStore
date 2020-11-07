@@ -67,7 +67,7 @@ final class Storage
     {
         return $this->getByUserName($userName)
             ->then(
-                function (User $user) use ($firstName, $lastName, $phone) {
+                function (User $user) use ($userName, $firstName, $lastName, $phone) {
                     $this->connection
                         ->query('
                             UPDATE
@@ -79,6 +79,7 @@ final class Storage
                             WHERE
                                 id = ?
                         ', [$firstName, $lastName, $phone, $user->id]);
+                    return $this->getByUserName($userName);
                 }
             )
             ->otherwise(

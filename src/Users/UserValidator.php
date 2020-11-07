@@ -20,17 +20,35 @@ final class UserValidator
         $this->request = $request;
     }
 
-    public function validate(): void
+    public function validate(string $type): void
     {
-        $userNameValidator = Validator::key(
-            'userName',
-            Validator::allOf(
-                Validator::notBlank(),
-                validator::stringType()
-            )
-        )->setName('userName');
+        if ($type === 'signup') {
+            $userNameValidator = Validator::key(
+                'userName',
+                Validator::allOf(
+                    Validator::notBlank(),
+                    validator::stringType()
+                )
+            )->setName('userName');
 
-        $firstNameValidator = Validator::key(
+            $emailValidator  = Validator::key(
+                'email',
+                Validator::allOf(
+                    Validator::notBlank(),
+                    validator::stringType(),
+                    Validator::email()
+                )
+            )->setName('email');
+
+            $passwordValidator  = Validator::key(
+                'password',
+                Validator::allOf(
+                    Validator::notBlank(),
+                    Validator::stringType()
+                )
+            )->setName('password');
+        }
+        $firstNameValidator  = Validator::key(
             'firstName',
             Validator::allOf(
                 Validator::notBlank(),
@@ -38,7 +56,7 @@ final class UserValidator
             )
         )->setName('firstName');
 
-        $lastNameValidator = Validator::key(
+        $lastNameValidator  = Validator::key(
             'lastName',
             Validator::allOf(
                 Validator::notBlank(),
@@ -46,23 +64,7 @@ final class UserValidator
             )
         )->setName('lastName');
 
-        $emailValidator = Validator::key(
-            'email',
-            Validator::allOf(
-                Validator::notBlank(),
-                validator::stringType(),
-                Validator::email()
-            )
-        )->setName('email');
-
-        $passwordValidator = Validator::key(
-            'password',
-            Validator::allOf(
-                Validator::notBlank(),
-                Validator::stringType()
-            )
-        )->setName('password');
-        $phoneValidator = Validator::key(
+        $phoneValidator  = Validator::key(
             'phone',
             Validator::allOf(
                 Validator::number(),
@@ -70,14 +72,22 @@ final class UserValidator
                 Validator::notBlank()
             )
         )->setName('phone');
-        $validator = Validator::allOf(
-            $userNameValidator,
-            $firstNameValidator,
-            $lastNameValidator,
-            $emailValidator,
-            $passwordValidator,
-            $phoneValidator
-        );
+        if ($type === 'signup') {
+            $validator = Validator::allOf(
+                $userNameValidator,
+                $firstNameValidator,
+                $lastNameValidator,
+                $emailValidator,
+                $passwordValidator,
+                $phoneValidator
+            );
+        } else {
+            $validator = Validator::allOf(
+                $firstNameValidator,
+                $lastNameValidator,
+                $phoneValidator
+            );
+        }
         $validator->assert($this->request->getParsedBody());
     }
 

@@ -5,11 +5,14 @@ namespace App\Users\Controllers;
 
 
 use Psr\Http\Message\ServerRequestInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 
 use App\Core\JsonResponse;
 use App\Users\Storage;
+use App\Users\User;
 use App\Users\UserNotFound;
+use App\Users\UserValidator;
 
 
 final class UpdateUser
@@ -26,18 +29,22 @@ final class UpdateUser
 
     public function __invoke(ServerRequestInterface $request, string $userName)
     {
-        $firstName = $request->getParsedBody()['firstName'];
-        $lastName = $request->getParsedBody()['lastName'];
-        $phone = $request->getParsedBody()['phone'];
-        return $this->storage->update($userName, $firstName, $lastName, $phone)
+        $user = new UserValidator($request);
+        $user->validate('update');
+        return $this->storage->update($userName, $user->firstName(), $user->lastName(), $user->phone())
             ->then(
-                function () {
-                    return JsonResponse::ok(['user' => 'updated']);
+                function (User $user) {
+                    return JsonResponse::ok(['user' => $user]);
                 }
             )
             ->otherwise(
                 function (UserNotFound $error) {
                     return JsonResponse::notFound();
+                }
+            )
+            ->otherwise(
+                function (NestedValidationException $exception) {
+                    return JsonResponse::badRequest(array_values($exception->getMessages()));
                 }
             );
     }
