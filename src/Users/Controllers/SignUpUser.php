@@ -4,6 +4,7 @@
 namespace App\Users\Controllers;
 
 
+use App\Users\EmailIsAlreadyTaken;
 use App\Users\UserAlreadyExists;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -40,7 +41,12 @@ final class SignUpUser
             )
             ->otherwise(
                 function (UserAlreadyExists $exception) {
-                    return JsonResponse::internalServerError('username is already taken');
+                    return JsonResponse::internalServerError('User already exists');
+                }
+            )
+            ->otherwise(
+                function (EmailIsAlreadyTaken $exception) {
+                    return JsonResponse::internalServerError('Email is already taken');
                 }
             );
     }

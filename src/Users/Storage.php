@@ -102,14 +102,19 @@ final class Storage
         return $this->userNameIsNotTaken($userName)
             ->then(
                 function () use ($userName, $firstName, $lastName, $email, $password, $phone) {
-                    $this->connection
-                        ->query('
+                    return $this->emailIsNotTaken($email)
+                        ->then(
+                            function () use ($userName, $firstName, $lastName, $email, $password, $phone) {
+                                $this->connection
+                                    ->query('
                             INSERT INTO 
                                 users (username, first_name, last_name, email, password, phone)
                             VALUES
                                 (?, ?, ?, ?, ?, ?)
                         ',
-                        [$userName, $firstName, $lastName, $email, $password, $phone]);
+                                        [$userName, $firstName, $lastName, $email, $password, $phone]);
+                            }
+                        );
                 }
             );
     }
@@ -123,6 +128,19 @@ final class Storage
                     return empty($result->resultRows)
                         ? resolve()
                         : reject(new UserAlreadyExists());
+                }
+            );
+    }
+
+    private function emailIsNotTaken(string $email): PromiseInterface
+    {
+        return $this->connection
+            ->query('SELECT 1 FROM users WHERE email = ?', [$email])
+            ->then(
+                function (QueryResult $result) {
+                    return empty($result->resultRows)
+                        ? resolve()
+                        : reject(new EmailIsAlreadyTaken());
                 }
             );
     }
