@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 use App\Core\JsonResponse;
 use App\Users\Storage;
-use App\Users\User;
 use App\Users\UserNotFound;
 
 
