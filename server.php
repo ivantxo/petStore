@@ -13,11 +13,13 @@ use \React\Socket\Server as Socket;
 
 
 use App\Core\Router;
+use App\Core\ErrorHandler;
 use App\Users\Controllers\DeleteUser;
 use App\Users\Controllers\GetByUserName;
 use App\Users\Controllers\SignInUser;
 use App\Users\Controllers\SignUpUser;
 use App\Users\Controllers\UpdateUser;
+
 
 $loop = Factory::create();
 $routes = new RouteCollector(new Std(), new GroupCountBased());
@@ -31,6 +33,7 @@ $routes->get('/user/{username}', new GetByUserName());
 
 $server = new Server(
     $loop,
+    new ErrorHandler(),
     new Router($routes)
 );
 
