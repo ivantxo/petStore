@@ -5,7 +5,6 @@ namespace App\Users\Controllers;
 
 
 use Psr\Http\Message\ServerRequestInterface;
-use React\Http\Message\Response;
 
 
 use App\Core\JsonResponse;
@@ -13,13 +12,8 @@ use App\Core\JsonResponse;
 
 final class UpdateUser
 {
-    public function __invoke(ServerRequestInterface $request)
+    public function __invoke(ServerRequestInterface $request, string $userName)
     {
-        return JsonResponse::ok();
-        return new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['message' => 'PUT request to /user/{username}'])
-        );
+        return JsonResponse::ok(['message' => "PUT request to /user/$userName"]);
     }
 }
