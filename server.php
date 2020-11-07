@@ -44,7 +44,7 @@ $routes = new RouteCollector(new Std(), new GroupCountBased());
 $routes->delete('/user/{username}', new DeleteUser($users));
 $routes->get('/user/login', new SignInUser());
 $routes->post('/user', new SignUpUser());
-$routes->put('/user/{username}', new UpdateUser());
+$routes->put('/user/{username}', new UpdateUser($users));
 $routes->get('/user/{username}', new GetByUserName($users));
 
 $server = new Server(

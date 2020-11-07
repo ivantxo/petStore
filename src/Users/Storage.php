@@ -24,13 +24,13 @@ final class Storage
     public function getByUserName(string $userName): PromiseInterface
     {
         return $this->connection
-            ->query(
-                'SELECT 
-                        id, username, first_name, last_name, email, password, phone, status, created_at
-                     FROM
-                        users
-                     WHERE
-                        username = ?',
+            ->query('
+                SELECT 
+                    id, username, first_name, last_name, email, password, phone, status, created_at
+                FROM
+                    users
+                WHERE
+                    username = ?',
                 [$userName]
             )
             ->then(
@@ -46,12 +46,12 @@ final class Storage
     public function delete(string $userName): PromiseInterface
     {
         return $this->connection
-            ->query(
-                'DELETE
-                     FROM
-                        users
-                     WHERE
-                        username = ?',
+            ->query('
+                DELETE
+                FROM
+                    users
+                WHERE
+                    username = ?',
                 [$userName]
             )
             ->then(
@@ -59,6 +59,32 @@ final class Storage
                     if ($result->affectedRows === 0) {
                         throw new UserNotFound();
                     }
+                }
+            );
+    }
+
+    public function update(string $userName, string $firstName, string $lastName, string $phone): PromiseInterface
+    {
+        return $this->getByUserName($userName)
+            ->then(
+                function (User $user) use ($firstName, $lastName, $phone) {
+                    $this->connection
+                        ->query('
+                            UPDATE
+                                users
+                            SET
+                                first_name = ?,
+                                last_name = ?,
+                                phone = ?
+                            WHERE
+                                id = ?
+                        ',
+                            [$firstName, $lastName, $phone, $user->id]);
+                }
+            )
+            ->otherwise(
+                function () {
+                    throw new UserNotFound();
                 }
             );
     }
