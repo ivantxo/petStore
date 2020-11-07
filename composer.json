@@ -13,5 +13,16 @@
     "psr-4": {
       "App\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "seregazhuk/react-promise-testing": "0.*",
+    "mockery/mockery": "^1.0",
+    "phpunit/phpunit": "~7.0",
+    "clue/block-react": "^1.4"
   }
 }
