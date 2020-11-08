@@ -18,9 +18,5 @@ class SignUpUserTest extends \PHPUnit\Framework\TestCase
      */
     public function setUpConnector()
     {
-        $this->loop = Factory::create();
-
-        $f = new \React\Dns\Resolver\Factory();
-        $resolver = $f->create('0.0.0.0', $this->loop);
     }
 }
