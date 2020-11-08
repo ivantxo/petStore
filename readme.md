@@ -8,7 +8,17 @@ The following endpoints were implemented:
 * Get user by username
 * Delete user
 
-In order to implement this API I have used [ReactPHP](https://reactphp.org/) which is a library that allows to do Asynchronous programming with PHP or non-blocking PHP.
+In order to implement this API I have used [ReactPHP](https://reactphp.org/) which is a library that allows to do Asynchronous programming with PHP or non-blocking PHP. The application is organised as follows:
+* Migrations: Migrations folder
+* src: Main src code
+  * Core: Web server middlewares
+  * Users: All related to the users logic
+    * Controllers: Or Endpoints logic
+  * Categories: All related to the categories logic should go here
+  * Pets: All related to the pets logic should go here
+  * Stores: All related to the stores logic should go here
+  * Tags: All related to the tags logic should go here
+* tests: All tests should go here
 
 ### How to use this API:
 
