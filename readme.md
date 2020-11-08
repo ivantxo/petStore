@@ -14,10 +14,14 @@ In order to implement this API I have used [ReactPHP](https://reactphp.org/) whi
   * Core: Web server middlewares
   * Users: All related to the users logic
     * Controllers: Or Endpoints logic
-  * Categories: All related to the categories logic should go here
-  * Pets: All related to the pets logic should go here
-  * Stores: All related to the stores logic should go here
-  * Tags: All related to the tags logic should go here
+      * DeleteUser.php (implemented)
+      * GetByUserName.php (implemented)
+      * SignUpUser.php (implemented)
+      * UpdateUser.php (implemented)
+  * Categories: All related to the categories logic should go here (not implemented)
+  * Pets: All related to the pets logic should go here (not implemented)
+  * Stores: All related to the stores logic should go here (not implemented)
+  * Tags: All related to the tags logic should go here (not implemented)
 * tests: All tests should go here
 
 ### How to use this API:
