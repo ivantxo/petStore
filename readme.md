@@ -26,25 +26,33 @@ In order to implement this API I have used [ReactPHP](https://reactphp.org/) whi
 
 ### How to use this API:
 
-1. Run docker-compose: 
+1. Create a .env file and make sure your DB credentials are ok
+
+```bash
+cp .env.dist .env
+```
+
+2. Check that the DB credentials on docker-composer.yml are ok
+
+3. Run docker-compose: 
 
 ```bash
 docker-compose up
 ```
 
-2. Install Composer dependencies:
-
+4. Install Composer dependencies:
+ 
 ```bash
 docker-compose exec php composer install
 ```
 
-3. Execute migrations:
+5. Execute migrations:
 
 ```bash
 docker-compose exec php ./vendor/bin/doctrine-migrations migrate
 ```
 
-4. Run the web server
+6. Run the web server
 
 ```bash
 docker-compose exec php php server.php
