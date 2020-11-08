@@ -18,11 +18,20 @@ final class Storage
      */
     private $connection;
 
+    /**
+     * Storage constructor.
+     * @param ConnectionInterface $connection
+     */
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
 
+    /**
+     * If username is valid, the promise resolves to a User model, otherwise rejects to UserNotFound Exception
+     * @param string $userName
+     * @return PromiseInterface
+     */
     public function getByUserName(string $userName): PromiseInterface
     {
         return $this->connection
@@ -44,6 +53,11 @@ final class Storage
             );
     }
 
+    /**
+     * If username is valid, the promise resolves and deletes from the DB, otherwise rejects to UserNotFound Exception
+     * @param string $userName
+     * @return PromiseInterface
+     */
     public function delete(string $userName): PromiseInterface
     {
         return $this->connection
@@ -63,6 +77,14 @@ final class Storage
             );
     }
 
+    /**
+     * If id is valid, the promise resolves and updates the user, otherwise rejects to UserNotFound Exception
+     * @param string $userName
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $phone
+     * @return PromiseInterface
+     */
     public function update(string $userName, string $firstName, string $lastName, string $phone): PromiseInterface
     {
         return $this->getByUserName($userName)
@@ -89,6 +111,16 @@ final class Storage
             );
     }
 
+    /**
+     * Creates a user into DB
+     * @param string $userName
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param string $password
+     * @param string $phone
+     * @return PromiseInterface
+     */
     public function create(
         string $userName,
         string $firstName,
@@ -116,6 +148,11 @@ final class Storage
             );
     }
 
+    /**
+     * If username already exists the promise rejects with UserAlreadyExists Exception, otherwise just resolves
+     * @param string $userName
+     * @return PromiseInterface
+     */
     private function userNameIsNotTaken(string $userName): PromiseInterface
     {
         return $this->connection
@@ -129,6 +166,11 @@ final class Storage
             );
     }
 
+    /**
+     * If email already exists the promise rejects with EmailIsAlreadyTaken Exception, otherwise just resolves
+     * @param string $email
+     * @return PromiseInterface
+     */
     private function emailIsNotTaken(string $email): PromiseInterface
     {
         return $this->connection
@@ -142,6 +184,11 @@ final class Storage
             );
     }
 
+    /**
+     * Maps a row from the DB to a User Model
+     * @param array $row
+     * @return User
+     */
     private function mapUser(array $row): User
     {
         $user = new User(

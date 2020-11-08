@@ -11,6 +11,11 @@ use Respect\Validation\Exceptions\NestedValidationException;
 use function React\Promise\resolve;
 
 
+/**
+ * Middleware to display errors nicely
+ * Class ErrorHandler
+ * @package App\Core
+ */
 final class ErrorHandler
 {
     public function __invoke(ServerRequestInterface $request, callable $next)

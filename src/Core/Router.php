@@ -12,6 +12,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Message\Response;
 
 
+/**
+ * Middleware that will dispatch the requests.
+ * Class Router
+ * @package App\Core
+ */
 final class Router
 {
     /**

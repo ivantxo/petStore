@@ -8,6 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator;
 
 
+/**
+ * Helper Class UserValidator
+ * @package App\Users
+ */
 final class UserValidator
 {
     /**
@@ -20,6 +24,12 @@ final class UserValidator
         $this->request = $request;
     }
 
+    /**
+     * Validates if ServerRequestInterface data are valid.
+     * If $type is 'signup' validates the mandatory data for SignUp User Controller
+     * If $type is 'update' validates the mandatory data for Update User Controller
+     * @param string $type
+     */
     public function validate(string $type): void
     {
         if ($type === 'signup') {

@@ -29,8 +29,12 @@ final class SignUpUser
 
     public function __invoke(ServerRequestInterface $request)
     {
+        // First the controller validates the request being sent
         $user = new UserValidator($request);
         $user->validate('signup');
+        // The controller interacts with the DB in order to signup a user
+        // If the promise returned by create resolves, then returns a successful response to the customer
+        // Otherwise, there are 3 potential rejections that are returned to the customer
         return $this->storage->create(
             $user->userName(),
             $user->firstName(),

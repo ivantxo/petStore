@@ -29,8 +29,12 @@ final class UpdateUser
 
     public function __invoke(ServerRequestInterface $request, string $userName)
     {
+        // First the controller validates the request being sent
         $user = new UserValidator($request);
         $user->validate('update');
+        // The controller interacts with the DB in order to update a user
+        // If the promise returned by create resolves, then returns a successful response to the customer
+        // Otherwise, there are 2 potential rejections that are returned to the customer
         return $this->storage->update($userName, $user->firstName(), $user->lastName(), $user->phone())
             ->then(
                 function (User $user) {
