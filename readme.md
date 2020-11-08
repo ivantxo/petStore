@@ -1,6 +1,6 @@
 # petStore RESTful API
 
-This repo contains the code for a small petStore
+This repo contains the code for a small petStore RESTful API
 
 The following endpoints were implemented:
 * SignUp user
