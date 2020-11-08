@@ -8,7 +8,9 @@ The following endpoints were implemented:
 * Get user by username
 * Delete user
 
-In order to implement this API I have used [ReactPHP](https://reactphp.org/) which is a library that allows to do Asynchronous programming with PHP or non-blocking PHP. Therefore the code is event-driven (when a new request arrives an event is fired, a callback is called, event handler is executed). The application is organised as follows:
+In order to implement this API I have used [ReactPHP](https://reactphp.org/) which is a library that allows to do Asynchronous programming with PHP or non-blocking PHP. Therefore the code is event-driven (The event loop manages all events that occur. Each event may have a handler (a callback), associated . When such event is fired, event loop executes its callback.). 
+
+The API is organised as follows:
 * Migrations: Migrations folder
 * src: Main src code
   * Core: Web server middlewares
